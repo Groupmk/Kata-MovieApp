@@ -1,0 +1,91 @@
+#root {
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+  .Space {
+    height: 100%;
+  }
+  .Content {
+    height: 100%;
+	flex: 1;
+  }
+  .layout {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh; /* Это установит высоту контейнера на всю высоту видимой области */
+  }
+  html {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+body {
+	font-family: 'SFProDisplay', sans-serif;
+	margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+}
+
+ul, ol, menu {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+img {
+	max-width: 100%;
+	
+}
+
+/* app.css */
+.offline-message {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 24px;
+    text-align: center;
+}
+
+.offline-message h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.offline-message p {
+    font-size: 20px;
+}
+.imageOfline {
+	margin-top: 30px;
+	background-image: url(./mem.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	width: 357px;
+	height: 280px;
+
+  }
+  
+
+      

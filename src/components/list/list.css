@@ -1,0 +1,55 @@
+
+.List {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 37px; 
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+/* .ListHeaderItems{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+.ListCardPopularity{
+
+  } */
+.ListCard{
+    display: flex;
+    background-color: #dad6d6;
+    box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.2);
+    max-width: 440px;
+    max-height: 220px;
+} 
+
+.ListCardInfo{
+    text-align: center;
+}
+.ListText {
+    text-align: center;
+    padding: 0 5px 0 20px;
+  
+    max-width: 20em;
+    font-size: 12px;
+  }
+  
+.ListCardInfo time{
+    padding-bottom: 50px;
+}
+.ListCardGenres{
+    padding: 15px 0 15px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+.ListCardGenres span{
+    background-image: linear-gradient(to right, #cab7b79c, #797c799f);
+    color: #000;
+    border: #FAFAFA;
+    margin-left: 10px;
+    padding: 5px;
+    border-color: #D9D9D9;
+  }
+
