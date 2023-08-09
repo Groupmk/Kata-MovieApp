@@ -1,0 +1,19 @@
+.rated{
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 37px; 
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+.custom-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 420px){
+    .rated{
+      grid-template-columns: 1fr
+    }
+  }

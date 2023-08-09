@@ -1,55 +1,121 @@
-
-.List {
-    display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 37px; 
-    margin-top: 50px;
-    margin-bottom: 50px;
-  }
-/* .ListHeaderItems{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-  }
-.ListCardPopularity{
-
-  } */
 .ListCard{
     display: flex;
     background-color: #dad6d6;
     box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.2);
-    max-width: 440px;
-    max-height: 220px;
+    width: 31rem;
+    height: 17.4375rem;
 } 
-
+.listData{
+  font-family: Inter;
+font-size: 0.75rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.375rem; 
+}
 .ListCardInfo{
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.ListTitle{
+  font-family: Inter;
+font-size: 1.25rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.75rem;
+max-width: 10.25em;
+padding-left: 15px;
 }
 .ListText {
     text-align: center;
-    padding: 0 5px 0 20px;
-  
-    max-width: 20em;
-    font-size: 12px;
+    font-family: Inter;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.375rem;
   }
-  
-.ListCardInfo time{
-    padding-bottom: 50px;
-}
 .ListCardGenres{
-    padding: 15px 0 15px 0;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
 }
 .ListCardGenres span{
     background-image: linear-gradient(to right, #cab7b79c, #797c799f);
     color: #000;
     border: #FAFAFA;
     margin-left: 10px;
-    padding: 5px;
     border-color: #D9D9D9;
+    color: rgba(0, 0, 0, 0.65);
+    font-family: Inter;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 0.31rem;
   }
-
+.ListItems{
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.ListHeaderItems{
+  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    
+}
+.ListCardPoster{
+  width: 12rem;
+}
+.ListCardImage{
+  max-width: 11.5rem;
+   height: auto;
+    cursor: pointer;
+}
+@media (max-width: 420px){
+    .ListCard{
+        background-color: #dad6d6;
+        box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.2);
+        width: 24.1875rem;
+        height: 15.3125rem;
+    }
+    .ListCardPoster{
+      width: 3.75rem;
+    
+    }
+    .ListCardImage{
+      width: 4.20rem;
+    }
+    .ListTitle{
+      font-family: Inter;
+      font-size: 1.25rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 1.75rem;
+      margin-top: -5px;
+    }
+    .ListCardGenres span{
+      color: rgba(0, 0, 0, 0.65);
+      font-family: Inter;
+      font-size: 0.75rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      padding: 0.19rem;
+    }
+    .ListText{
+      font-family: Inter;
+      font-size: 0.75rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 1.375rem;
+      margin-left: -50px;
+    }
+    .ListItems{
+      margin-left: -200px;
+      margin-top: -23px;
+    }
+    .ListCardGenres{
+      margin-left: -65px;
+    }
+}

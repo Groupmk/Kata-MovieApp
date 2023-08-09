@@ -1,0 +1,11 @@
+.inputBox{
+    width: 938px;
+    height: 40px;
+}
+
+@media (max-width: 420px){
+    .inputBox{
+        width: 24.25rem;
+        height: 2.5rem;
+    }
+}

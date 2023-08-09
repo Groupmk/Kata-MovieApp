@@ -2,8 +2,15 @@ import React from "react";
 import './list.css';
 import { format } from 'date-fns';
 import { enGB } from 'date-fns/locale';
-const List = ({movies}) => {
+import { Rate } from "antd";
+import { useRated } from '../castomHuks/rated-context';
+import MovieApi from "../../service/movie-api";
+import { getColorForRating } from '../utils/getColorRating';
+
+
+const List = ({movies, guestSessionId, createGuestSession, disableStars }) => {
     const _posterPatch = "https://image.tmdb.org/t/p/w200";
+    const moveiApi = new MovieApi();
     const getGenresNames = (genreIds) => {
         const genresMap = {
           16: 'Анимация',
@@ -51,40 +58,80 @@ const List = ({movies}) => {
         }
         const truncated = text.slice(0, maxLength).trim();
         const lastSpaceIndex = truncated.lastIndexOf(' ');
-        
         if (lastSpaceIndex !== -1) {
           return truncated.slice(0, lastSpaceIndex) + '...';
         }
-        
         return truncated + '...';
-      };      
-      
+      };  
+
+      const { ratedMovies, setRatedMovies } = useRated();
+      const ratedClick = async (movie, rating) => {
+        if (!ratedMovies.find((ratedMovie) => ratedMovie.id === movie.id)) {
+          try {
+            if (!guestSessionId) {
+              await createGuestSession(rating); 
+            }
+            const response = await moveiApi.rateMovie(guestSessionId, movie.id, rating);
+            console.log("Rating response:", response);
+            setRatedMovies([...ratedMovies, { ...movie, rating }]);
+          } catch (error) {
+            console.error("Error rating movie:", error);
+          }
+        } else {
+          try {
+            const response = await moveiApi.rateMovie(guestSessionId, movie.id, rating);
+            console.log("Rating response:", response);
+            const updatedRatedMovies = ratedMovies.map((ratedMovie) =>
+                ratedMovie.id === movie.id ? { ...ratedMovie, rating } : ratedMovie
+            );
+            setRatedMovies(updatedRatedMovies);
+            console.log("Updated rating:", rating);
+        } catch (error) {
+            console.error("Error updating movie rating:", error);
+        }
+    }
+      };
+
       return (
         <div className="List">
           {movies.map((movie) => {
-            if (!movie.overview || !movie.poster_path) {
-              return null; 
-            } 
+           
             const truncatedOverview = truncateText(movie.overview, 150);
             return (
               <div className="ListCard" key={movie.id}>
-                <img
+               <div className="ListCardPoster"> 
+               {!movie.poster_path ? <div style={{width: '12rem'}}>'not poster'</div>  : <img
+               className="ListCardImage"
                   src={`${_posterPatch}${movie.poster_path}`}
                   alt={movie.title}
-                  style={{ maxWidth: '100%', height: 'auto' }}
-                />
+                />}</div>
                 <div className="ListCardInfo">
-                <div className="ListHeaderItems">
-                <h1 style={{ fontSize: '12px', paddingTop: '10px' }}>{movie.title}</h1>
-                {/* <div className="ListCardPopularity">
-                    {Math.min(Math.round(movie.popularity * 10) / 10, 10)}
-                    </div> */}
+                <div className="CurrentRatingBlock">
                 </div>
-                  {movie.release_date && (
-                    <time datetime="2023-07-30T12:00">{formatDate(movie.release_date)}</time>
+                <div className="ListHeaderItems">
+                <h1 className="ListTitle">{movie.title}</h1>
+                <div className="CurrentRatingCircle" style={{ 
+                  border: 'solid 1px ' + getColorForRating(movie.vote_average),
+                  width: '25px', height: '25px', borderRadius: '50%', marginRight: '10px'}}>
+                  {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+                </div>
+                </div>
+                 <div className="ListItems">
+                 {movie.release_date && (
+                    <time dateTime="2023-07-30T12:00" className="ListData">{formatDate(movie.release_date)}</time>
                   )}
+                 </div>
                   <div className="ListCardGenres">{getGenresNames(movie.genre_ids)}</div>
-                  <p className="ListText">{truncatedOverview}</p>
+                  {!movie.overview ? 'not found' : <p className="ListText">{truncatedOverview}</p>}
+                  <Rate
+                    allowHalf
+                    value={movie.rating}
+                    count={10}
+                    size="small"
+                    style={{ fontSize: 15, paddingLeft: '15px', paddingBottom: '15px' }}
+                    onChange={(value) => ratedClick(movie, value)}
+                    disabled={disableStars} 
+                />
                 </div>
               </div>
             );

@@ -1,0 +1,14 @@
+.GetList{
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 37px; 
+  margin-top: 50px;
+  margin-bottom: 50px;
+  
+}
+
+@media (max-width: 420px){
+  .GetList{
+    grid-template-columns: 1fr
+  }
+}
