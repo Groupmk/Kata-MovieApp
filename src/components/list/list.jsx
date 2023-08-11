@@ -106,8 +106,6 @@ const List = ({movies, guestSessionId, createGuestSession, disableStars }) => {
                   alt={movie.title}
                 />}</div>
                 <div className="ListCardInfo">
-                <div className="CurrentRatingBlock">
-                </div>
                 <div className="ListHeaderItems">
                 <h1 className="ListTitle">{movie.title}</h1>
                 <div className="CurrentRatingCircle" style={{ 
