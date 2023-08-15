@@ -27,6 +27,7 @@ export default class MovieApi{
       async getGenres() {
         const res = await fetch(`${this._apiBase}/genre/movie/list?api_key=${this._apiKey}`);
         const data = await res.json();
+        // console.log(data);
         return data.genres;
       }
       

@@ -4,42 +4,19 @@ import { format } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import { Rate } from "antd";
 import { useRated } from '../castomHuks/rated-context';
-import MovieApi from "../../service/movie-api";
 import { getColorForRating } from '../utils/getColorRating';
 
 
-const List = ({movies, guestSessionId, createGuestSession, disableStars }) => {
+const List = ({movies, guestSessionId, genres, disableStars }) => {
     const _posterPatch = "https://image.tmdb.org/t/p/w200";
-    const moveiApi = new MovieApi();
-    const getGenresNames = (genreIds) => {
-        const genresMap = {
-          16: 'Анимация',
-          28: 'Боевик',
-          27: 'Ужасы',
-          35: 'Криминал',
-          18: 'Драма',
-          36: 'Фантастика',
-          80: 'Приключения',
-          99: 'Комедия',
-          878: 'Фэнтези',
-          9648: 'Мелодрама',
-          10749: 'Триллер',
-          10751: 'Музыка',
-          10752: 'Детектив',
-          10770: 'Семейный',
-        };
-       genreIds.map((genreId) => genresMap[genreId]).join(', ');
-       return genreIds.map((genreId) => {
-        if (genresMap[genreId]) {
-          return (
-            <span key={genreId} className={genresMap[genreId]}>
-              {genresMap[genreId]}
-            </span>
-          );
-        }
-        return null;
+    const { ratedMovies, setRatedMovies } = useRated();
+    function getGenresForMovie(movie, genres) {
+      const movieGenres = movie.genre_ids || [];
+      return movieGenres.map((genreId) => {
+          const genre = genres.find((g) => g.id === genreId);
+          return genre ? <span key={genreId} className={genre.name}>{genre.name}</span> : <span key={genreId}></span>;
       });
-      };
+  }
       const formatDate = (yourDate) => {
         if (!yourDate) {
           return "Дата не указана";
@@ -64,33 +41,16 @@ const List = ({movies, guestSessionId, createGuestSession, disableStars }) => {
         return truncated + '...';
       };  
 
-      const { ratedMovies, setRatedMovies } = useRated();
-      const ratedClick = async (movie, rating) => {
+      const ratedClick = async (movie, rating, guestSessionId, ratedMovies, setRatedMovies) => {
+        console.log(movie, rating, guestSessionId, ratedMovies, setRatedMovies);
         if (!ratedMovies.find((ratedMovie) => ratedMovie.id === movie.id)) {
-          try {
-            if (!guestSessionId) {
-              await createGuestSession(rating); 
-            }
-            const response = await moveiApi.rateMovie(guestSessionId, movie.id, rating);
-            console.log("Rating response:", response);
-            setRatedMovies([...ratedMovies, { ...movie, rating }]);
-          } catch (error) {
-            console.error("Error rating movie:", error);
-          }
-        } else {
-          try {
-            const response = await moveiApi.rateMovie(guestSessionId, movie.id, rating);
-            console.log("Rating response:", response);
-            const updatedRatedMovies = ratedMovies.map((ratedMovie) =>
-                ratedMovie.id === movie.id ? { ...ratedMovie, rating } : ratedMovie
-            );
-            setRatedMovies(updatedRatedMovies);
-            console.log("Updated rating:", rating);
-        } catch (error) {
-            console.error("Error updating movie rating:", error);
-        }
-    }
-      };
+          setRatedMovies([...ratedMovies, { ...movie, rating }]);
+      } else {
+          const updatedRatedMovies = ratedMovies.map((ratedMovie) =>
+              ratedMovie.id === movie.id ? { ...ratedMovie, rating } : ratedMovie
+          );
+          setRatedMovies(updatedRatedMovies);
+      }}
 
       return (
         <div className="List">
@@ -119,7 +79,7 @@ const List = ({movies, guestSessionId, createGuestSession, disableStars }) => {
                     <time dateTime="2023-07-30T12:00" className="ListData">{formatDate(movie.release_date)}</time>
                   )}
                  </div>
-                  <div className="ListCardGenres">{getGenresNames(movie.genre_ids)}</div>
+                  <div className="ListCardGenres">{getGenresForMovie(movie, genres)}</div>
                   {!movie.overview ? 'not found' : <p className="ListText">{truncatedOverview}</p>}
                   <Rate
                     allowHalf
@@ -127,7 +87,7 @@ const List = ({movies, guestSessionId, createGuestSession, disableStars }) => {
                     count={10}
                     size="small"
                     style={{ fontSize: 15, paddingLeft: '15px', paddingBottom: '15px' }}
-                    onChange={(value) => ratedClick(movie, value)}
+                    onChange={(value) => ratedClick(movie, value, guestSessionId, ratedMovies, setRatedMovies)}
                     disabled={disableStars} 
                 />
                 </div>

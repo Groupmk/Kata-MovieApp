@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Layout, Space } from 'antd';
 import MovieApi from '../../service/movie-api';
 import LoaderRotate from '../UI/loader/loader';
@@ -8,7 +8,6 @@ import GetList from '../get-list/get-list';
 import './first-list.css';
 import AlertError from '../UI/alert-error/alert-error';
 import PaginationMovie from '../pagination/pagination';
-import { GenreContext  } from "../castomHuks/genre-context";
 const { Header, Footer, Content } = Layout;
 
 const FirstList = () => {
@@ -41,8 +40,6 @@ const FirstList = () => {
   const [noResults, setNoResults] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [guestSessionId, setGuestSessionId] = useState(null);
-  const [genres, setGenres] = useState([]); 
-  const { setGenres: setGenresContext } = useContext(GenreContext); 
   const [fetchMovies, loading, error, errorType, currentPage, setCurrentPage] = useFetching(async (query, page) => {
     setCurrentPage(1);
     const data = await moveiApi.searchMovie(query, page); 
@@ -52,32 +49,27 @@ const FirstList = () => {
       setNoResults(false);
     }
     setMovies(data.results);
-    console.log(data.results);
   }, guestSessionId);
-  const createGuestSession = async (movie, rating) => {
-    try {
-        const response = await moveiApi.rateMovie(rating);
-        setGuestSessionId(response.guest_session_id);
-        console.log(response.guest_session_id);
-    } catch (error) {
-        console.error("Error creating guest session:", error);
-    }
-};
 
+  
+  const createGuestSession = useCallback(async () => {
+    const initialRating = 0;
+    try {
+      const response = await moveiApi.rateMovie(initialRating); 
+      console.log(response);
+      setGuestSessionId(response.guest_session_id);
+      console.log(response.guest_session_id);
+    } catch (error) {
+      console.error("Error creating guest session:", error);
+    }
+  }, []);
 
   useEffect(() => {
     createGuestSession();
 
-    
-    async function fetchGenres() {
-      const genres = await moveiApi.getGenres();
-      setGenres(genres);
-      setGenresContext(genres); 
-    }
-
-    fetchGenres();
     fetchMovies(setCurrentPage);
-  }, [setCurrentPage, setGenresContext]);
+  }, [createGuestSession, setCurrentPage]);
+
   
 
   let errorMessage = null;
@@ -133,7 +125,6 @@ const FirstList = () => {
             ) : (
               <GetList movies={movies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)}
               guestSessionId={guestSessionId}
-              genres={genres} 
               createGuestSession={createGuestSession}
               />
             )}
