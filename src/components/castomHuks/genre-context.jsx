@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import MovieApi from '../../service/movie-api';
 
 const GenreContext = createContext();

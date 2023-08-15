@@ -13,10 +13,11 @@ const List = ({movies, guestSessionId, genres, disableStars }) => {
     function getGenresForMovie(movie, genres) {
       const movieGenres = movie.genre_ids || [];
       return movieGenres.map((genreId) => {
-          const genre = genres.find((g) => g.id === genreId);
-          return genre ? <span key={genreId} className={genre.name}>{genre.name}</span> : <span key={genreId}></span>;
+        const genre = genres.find((g) => g && g.id === genreId);
+        return genre ? <span key={genreId} className={genre.name}>{genre.name}</span> : null;
       });
-  }
+    }
+    
       const formatDate = (yourDate) => {
         if (!yourDate) {
           return "Дата не указана";

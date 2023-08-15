@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,  useContext } from 'react';
 import { useRated } from '../castomHuks/rated-context';
+import { GenreContext } from '../castomHuks/genre-context';
 import List from '../list/list';
 import './reted.css';
 import PaginationMovie from '../pagination/pagination';
@@ -9,6 +10,7 @@ const Rated = ({ guestSessionId }) => {
   console.log(ratedMovies);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
+  const genres = useContext(GenreContext);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
@@ -30,6 +32,7 @@ const Rated = ({ guestSessionId }) => {
               movies={[movie]}
               currentRating={movie.rating}
               guestSessionId={guestSessionId}
+              genres={genres}
               disableStars={true}
             />
           ))}
